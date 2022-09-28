@@ -18,7 +18,7 @@ public interface LogEntryEntityParser {
             .toFormatter();
     Pattern ITEM_PURCHASED_PATTERN = Pattern.compile("\\[(.*)] (.*) buys item (.*)");
     Pattern HERO_KILLED_PATTERN = Pattern.compile("\\[(.*)] (.*) is killed by (.*)");
-    Pattern SPELL_CASTED_PATTERN = Pattern.compile("\\[(.*)] (.*) casts ability (.*) \\(lvl (\\d)\\) on .*");
+    Pattern SPELL_CASTED_PATTERN = Pattern.compile("\\[(.*)] (.*) .* ability (.*) \\(lvl (\\d)\\) on .*");
     Pattern DAMAGE_DONE_PATTERN = Pattern.compile("\\[(.*)] (.*) hits (.*) with (.*) for (.*) damage \\(\\d+->\\d+\\)");
     String HERO_OBJECT_PREFIX = "npc_dota_hero_";
 

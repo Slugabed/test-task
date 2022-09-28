@@ -105,7 +105,8 @@ class MatchControllerIntegrationTest {
                 .getResponse()
                 .getContentAsString();
         assertThat(returnedBody).isEqualTo("[{\"spell\":\"mars_gods_rebuke\",\"casts\":39}," +
-                "{\"spell\":\"mars_spear\",\"casts\":30},{\"spell\":\"mars_arena_of_blood\",\"casts\":7}]");
+                "{\"spell\":\"mars_bulwark\",\"casts\":1},{\"spell\":\"mars_spear\",\"casts\":30}," +
+                "{\"spell\":\"mars_arena_of_blood\",\"casts\":7}]");
     }
 
     /**
