@@ -1,7 +1,5 @@
 package gg.bayes.challenge.rest.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import gg.bayes.challenge.service.LogProcessingService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,8 +44,6 @@ class MatchControllerIntegrationTest {
                 COMBATLOG_FILE_2, ingestMatch(COMBATLOG_FILE_2));
     }
 
-    // TODO: add your tests
-    // Replace this test method with the tests that you consider appropriate to test your implementation.
     @Test
     void testHeroKills() throws Exception {
         var returnedBody = mvc.perform(get("/api/match/" + matchIds.get(COMBATLOG_FILE_1)))
@@ -70,6 +66,20 @@ class MatchControllerIntegrationTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
+        assertThat(returnedBody).isEqualTo("[{\"target\":\"snapfire\",\"damage_instances\":21,\"total_damage\":4279}," +
+                "{\"target\":\"dragon_knight\",\"damage_instances\":14,\"total_damage\":2198}," +
+                "{\"target\":\"puck\",\"damage_instances\":5,\"total_damage\":1711}," +
+                "{\"target\":\"abyssal_underlord\",\"damage_instances\":17,\"total_damage\":3009}," +
+                "{\"target\":\"pangolier\",\"damage_instances\":13,\"total_damage\":2295}]");
+    }
+
+    @Test
+    void testHeroItems() throws Exception {
+        var returnedBody = mvc.perform(get(
+                        String.format("/api/match/%s/%s/items", matchIds.get(COMBATLOG_FILE_1), "mars")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         assertThat(returnedBody).isEqualTo("[{\"item\":\"quelling_blade\",\"timestamp\":530292}," +
                 "{\"item\":\"tango\",\"timestamp\":531658},{\"item\":\"tango\",\"timestamp\":531825}," +
                 "{\"item\":\"flask\",\"timestamp\":532025},{\"item\":\"branches\",\"timestamp\":532558}," +
@@ -88,17 +98,14 @@ class MatchControllerIntegrationTest {
     }
 
     @Test
-    void testHeroItems() throws Exception {
+    void testHeroSpells() throws Exception {
         var returnedBody = mvc.perform(get(
-                        String.format("/api/match/%s/%s/items", matchIds.get(COMBATLOG_FILE_1), "mars")))
+                        String.format("/api/match/%s/%s/spells", matchIds.get(COMBATLOG_FILE_1), "mars")))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        assertThat(returnedBody).isEqualTo("[{\"target\":\"snapfire\",\"damage_instances\":21,\"total_damage\":4279}," +
-                "{\"target\":\"dragon_knight\",\"damage_instances\":14,\"total_damage\":2198}," +
-                "{\"target\":\"puck\",\"damage_instances\":5,\"total_damage\":1711}," +
-                "{\"target\":\"abyssal_underlord\",\"damage_instances\":17,\"total_damage\":3009}," +
-                "{\"target\":\"pangolier\",\"damage_instances\":13,\"total_damage\":2295}]");
+        assertThat(returnedBody).isEqualTo("[{\"spell\":\"mars_gods_rebuke\",\"casts\":39}," +
+                "{\"spell\":\"mars_spear\",\"casts\":30},{\"spell\":\"mars_arena_of_blood\",\"casts\":7}]");
     }
 
     /**

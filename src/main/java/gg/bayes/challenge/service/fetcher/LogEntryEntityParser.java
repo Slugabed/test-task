@@ -35,7 +35,7 @@ public interface LogEntryEntityParser {
         } else if ((matcher = DAMAGE_DONE_PATTERN.matcher(logRecord)).matches()) {
             return new DamageDoneParser(matcher);
         }
-        throw new IllegalArgumentException("Invalid log record format");
+        return new FallbackParser();
     }
 
     static boolean isHero(String objectName) {
