@@ -1,18 +1,19 @@
 package gg.bayes.challenge.service;
 
+import gg.bayes.challenge.service.fetcher.LogEntryEntityParser;
 import org.junit.jupiter.api.Test;
 
 import static gg.bayes.challenge.persistence.model.CombatLogEntryEntity.Type.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LogProcessingServiceImplTest {
+public class LogEntryEntityParserTest {
 
     @Test
     public void testParseTimeStamp() {
-        long timestamp1 = LogProcessingServiceImpl.parseTimeStamp("[00:24:57.256]");
+        long timestamp1 = LogEntryEntityParser.parseTimeStamp("00:24:57.256");
         assertEquals(timestamp1, (24 * 60 + 57) * 1000 + 256);
 
-        long timestamp2 = LogProcessingServiceImpl.parseTimeStamp("[12:24:57.256]");
+        long timestamp2 = LogEntryEntityParser.parseTimeStamp("12:24:57.256");
         assertEquals(timestamp2, ((12 * 60 + 24) * 60 + 57) * 1000 + 256);
     }
 
