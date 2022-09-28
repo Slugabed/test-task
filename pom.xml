@@ -20,6 +20,7 @@
         <commons-io.version>2.11.0</commons-io.version>
         <java.version>11</java.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+        <joda.version>2.11.2</joda.version>
     </properties>
 
     <dependencies>
@@ -72,6 +73,14 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- JODA time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

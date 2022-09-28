@@ -1,5 +1,7 @@
 package gg.bayes.challenge.rest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import gg.bayes.challenge.service.LogProcessingService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 /*
@@ -46,8 +49,56 @@ class MatchControllerIntegrationTest {
     // TODO: add your tests
     // Replace this test method with the tests that you consider appropriate to test your implementation.
     @Test
-    void someTest() {
-        assertThat(mvc).isNotNull();
+    void testHeroKills() throws Exception {
+        var returnedBody = mvc.perform(get("/api/match/" + matchIds.get(COMBATLOG_FILE_1)))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString();
+
+        assertThat(returnedBody).isEqualTo("[{\"hero\":\"snapfire\",\"kills\":2}" +
+                ",{\"hero\":\"rubick\",\"kills\":4}," +
+                "{\"hero\":\"mars\",\"kills\":6},{\"hero\":\"dragon_knight\",\"kills\":3}," +
+                "{\"hero\":\"bane\",\"kills\":2},{\"hero\":\"puck\",\"kills\":7},{\"hero\":\"death_prophet\",\"kills\":9}" +
+                ",{\"hero\":\"abyssal_underlord\",\"kills\":6},{\"hero\":\"pangolier\",\"kills\":5}" +
+                ",{\"hero\":\"bloodseeker\",\"kills\":11}]");
+    }
+
+    @Test
+    void testHeroDamages() throws Exception {
+        var returnedBody = mvc.perform(get(
+                String.format("/api/match/%s/%s/damage", matchIds.get(COMBATLOG_FILE_1), "mars")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        assertThat(returnedBody).isEqualTo("[{\"item\":\"quelling_blade\",\"timestamp\":530292}," +
+                "{\"item\":\"tango\",\"timestamp\":531658},{\"item\":\"tango\",\"timestamp\":531825}," +
+                "{\"item\":\"flask\",\"timestamp\":532025},{\"item\":\"branches\",\"timestamp\":532558}," +
+                "{\"item\":\"branches\",\"timestamp\":532691},{\"item\":\"magic_stick\",\"timestamp\":745606}," +
+                "{\"item\":\"recipe_magic_wand\",\"timestamp\":745772},{\"item\":\"boots\",\"timestamp\":745906}," +
+                "{\"item\":\"blades_of_attack\",\"timestamp\":749605},{\"item\":\"magic_wand\",\"timestamp\":782130}," +
+                "{\"item\":\"chainmail\",\"timestamp\":799826},{\"item\":\"boots\",\"timestamp\":888238}," +
+                "{\"item\":\"phase_boots\",\"timestamp\":917997},{\"item\":\"ring_of_regen\",\"timestamp\":984347}," +
+                "{\"item\":\"gauntlets\",\"timestamp\":984514},{\"item\":\"gauntlets\",\"timestamp\":984681}," +
+                "{\"item\":\"soul_ring\",\"timestamp\":986347},{\"item\":\"recipe_soul_ring\",\"timestamp\":986347}," +
+                "{\"item\":\"mithril_hammer\",\"timestamp\":1245150},{\"item\":\"blight_stone\",\"timestamp\":1245817}," +
+                "{\"item\":\"mithril_hammer\",\"timestamp\":1437937},{\"item\":\"desolator\",\"timestamp\":1466630}," +
+                "{\"item\":\"blink\",\"timestamp\":1685610},{\"item\":\"ogre_axe\",\"timestamp\":2242283}," +
+                "{\"item\":\"mithril_hammer\",\"timestamp\":2242517},{\"item\":\"black_king_bar\",\"timestamp\":2242617}," +
+                "{\"item\":\"recipe_black_king_bar\",\"timestamp\":2242617}]");
+    }
+
+    @Test
+    void testHeroItems() throws Exception {
+        var returnedBody = mvc.perform(get(
+                        String.format("/api/match/%s/%s/items", matchIds.get(COMBATLOG_FILE_1), "mars")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        assertThat(returnedBody).isEqualTo("[{\"target\":\"snapfire\",\"damage_instances\":21,\"total_damage\":4279}," +
+                "{\"target\":\"dragon_knight\",\"damage_instances\":14,\"total_damage\":2198}," +
+                "{\"target\":\"puck\",\"damage_instances\":5,\"total_damage\":1711}," +
+                "{\"target\":\"abyssal_underlord\",\"damage_instances\":17,\"total_damage\":3009}," +
+                "{\"target\":\"pangolier\",\"damage_instances\":13,\"total_damage\":2295}]");
     }
 
     /**

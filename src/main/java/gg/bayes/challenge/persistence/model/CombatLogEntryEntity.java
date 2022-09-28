@@ -26,6 +26,7 @@ public class CombatLogEntryEntity {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name="match_id", nullable=false, updatable=false)
     private MatchEntity match;
 
     @NotNull
